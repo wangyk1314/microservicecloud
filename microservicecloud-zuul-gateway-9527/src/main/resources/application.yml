@@ -1,0 +1,35 @@
+server: 
+  port: 9527
+ 
+spring: 
+  application:
+    name: microservicecloud-zuul-gateway
+ 
+eureka: 
+  client: 
+    service-url: 
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka,http://eureka7003.com:7003/eureka  
+  instance:
+    instance-id: gateway-9527.com
+    prefer-ip-address: true 
+ 
+
+zuul:
+  #ignored-services: microservicecloud-dept
+  #加了ignored-services: microservicecloud-dept  后以后就不能用http://myzuul.com:9527/microservicecloud-dept/dept/get/2访问了
+  #但是如果微服务过多，批量处理怎么办  用：ignored-services: "*"
+  prefix: /atguigu   #设置统一公共前缀  这样访问：http://myzuul.com:9527/atguigu/mydept/dept/get/2
+  ignored-services: "*"
+  #不暴露真实微服务的名称开始
+  #（也就是将microservicecloud-dept改为mydept。http://myzuul.com:9527/microservicecloud-dept/dept/get/2改为http://myzuul.com:9527/mydept/dept/get/2）
+  routes:
+    mydept.serviceId: microservicecloud-dept
+    mydept.path: /mydept/**
+  #不暴露真实微服务的名称结束
+ 
+info:
+  app.name: atguigu-microcloud
+  company.name: www.atguigu.com
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$
+
